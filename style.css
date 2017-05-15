@@ -1,0 +1,52 @@
+.list {
+	margin-left: 0;
+    padding-right: 0;
+    list-style-type: none;
+    counter-reset: step;
+    padding-left: 5em;
+}
+.list li {
+	position: relative;
+}
+.list li::before {
+	content: counter(step) ".";
+	counter-increment: step;
+	position: absolute;
+	top: -10px;
+	left: -37px;
+	color: #2e6da4;
+	font-weight: bold;
+	font-size: 170%;
+}
+
+.window-height {
+	height: 100vh;
+}
+.centered-child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.panel {
+	max-width: 414px;
+}
+.bigger {
+	font-size: 130%;
+}
+
+img {
+	animation: animation 2s cubic-bezier(0.4, 0, 1, 1);
+}
+
+@keyframes animation {
+	from {
+		-ms-transform: scale(0,0) rotate(0); /* IE 9 */
+	    -webkit-transform: scale(0,0) rotate(0); /* Chrome, Safari, Opera */
+	    transform: scale(0,0) rotate(0);
+	}
+	to {
+		-ms-transform: scale(1,1) rotate(1080deg); /* IE 9 */
+	    -webkit-transform: scale(1,1) rotate(1080deg); /* Chrome, Safari, Opera */
+	    transform: scale(1,1) rotate(1080deg);
+	}
+}
