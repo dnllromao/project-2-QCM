@@ -1,35 +1,41 @@
 <?php
 	
-		$interation = 0;
+		$questions = 0;
 		$count = 0;
 
 		function witch_class($name,$value) {
 
-			if(!isset($_GET[$name])) 
+			if(empty($_GET))
 				return;
 
-			global $interation;
 			global $count;
-
-			$interation ++;
 
 			if( $value == 'c') {
 				if(is_checked($name,$value)) { $count ++; }
 				return 'green';
 			}else if( is_checked($name,$value)) {
-				// return 'checked';
 				return 'red';
 			}
 		}
 
 		function is_checked($name,$value) {
-			if( $value == $_GET[$name])
+			if( isset($_GET[$name]) && $value == $_GET[$name])
 				return 'checked';
 		}
 
-		echo $interation;
-		echo $count;
+		function how_many() {
+			global $questions;
+			$questions++;
+		}
 
+		// sanitize last and first name and email validation
+		$lstName = (!empty($_GET['lst-name']))?sanitization($_GET['lst-name']):'';
+		$fstName = (!empty($_GET['fst-name']))?sanitization($_GET['fst-name']):'';
+
+		if( !empty($_GET['email']) && !filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) == false){
+			$email = filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL);
+			sendMail($email, $msg);
+		}
 	
 ?>
 <!DOCTYPE html>
@@ -45,7 +51,6 @@
 </head>
 <body>
 	<div class="container">
-<!-- 		<div class="col-sm-10"></div> -->
 		<div class="row">
 			<h1 class="text-center"><strong>Take the Quiz</strong></h1>
 		</div>
@@ -73,86 +78,98 @@
 						    	Réponse A
 						  	</label>
 						</div>
-						<input type="hidden" name="a-r" value="a1">
+						<?php how_many(); ?>
 					</li>
 					<li>
 						<h4>La bonne réponse est B?</h4>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="b" value="b1">
+							<label class="<?= witch_class('b','c'); ?>">
+						    	<input type="radio" name="b" value="c" <?= is_checked('b', 'c'); ?>>
 						    	Réponse A
 						  	</label>
 						</div>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="b" value="b2">
+							<label class="<?= witch_class('b','b2'); ?>">
+						    	<input type="radio" name="b" value="b2" <?= is_checked('b', 'b2'); ?>>
 						    	Réponse B
 						  	</label>
 						</div>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="b" value="b3">
+							<label class="<?= witch_class('b','b3'); ?>">
+						    	<input type="radio" name="b" value="b3" <?= is_checked('b', 'b3'); ?>>
 						    	Réponse A
 						  	</label>
 						</div>
-						<input type="hidden" name="b-r" value="b1">
+						<?php how_many(); ?>
 					</li>
 					<li>
 						<h4>La bonne réponse est C?</h4>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="c" value="c1">
+							<label class="<?= witch_class('c','c'); ?>">
+						    	<input type="radio" name="c" value="c"  <?= is_checked('c', 'c'); ?>>
 						    	Réponse A
 						  	</label>
 						</div>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="c" value="c2*">
+							<label class="<?= witch_class('c','c2'); ?>">
+						    	<input type="radio" name="c" value="c2"  <?= is_checked('c', 'c2'); ?>>
 						    	Réponse B
 						  	</label>
 						</div>
 						<div class="radio">
-							<label>
-						    	<input type="radio" name="c" value="c3">
+							<label class="<?= witch_class('c','c3'); ?>">
+						    	<input type="radio" name="c" value="c3"  <?= is_checked('c', 'c3'); ?>>
 						    	Réponse A
 						  	</label>
 						</div>
-						<input type="hidden" name="c-r" value="c1">
+						<?php how_many(); ?>
 					</li>
 				</ol>
 			</div>
 			<hr>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="well clearfix">
-						<div class="col-md-6">
-							<div class="form-group">
-							    <label for="lst-name" class="col-sm-2 control-label">Nom</label>
-							    <div class="col-sm-10">
-							      <input type="text" class="form-control" id="lst-name" name="lst-name">
-							    </div>
+			<?php
+				if(!empty($_GET)) {
+				?>
+				
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="alert alert-info" role="alert">
+								<p>Tu as réussi <?php echo $count.'/'.$questions; ?> questions.</p>
 							</div>
 						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-							    <label for="fst-name" class="col-sm-2 control-label">Prénom</label>
-							    <div class="col-sm-10">
-							      <input type="text" class="form-control" id="fst-name" name="fst-name">
-							    </div>
-							</div>
+					</div>
+				<?php
+				}
+			?>
+			<div class="well clearfix">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+						    <label for="lst-name" class="col-sm-2 control-label">Nom</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" id="lst-name" name="lst-name">
+						    </div>
 						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-							    <label for="email" class="col-sm-2 col-md-1 control-label">Email</label>
-							    <div class="col-sm-10 col-md-11">
-							      <input type="email" class="form-control" id="email" name="email">
-							    </div>
-							</div>
-							<div class="form-group">
-							    <div class="col-sm-offset-2 col-md-offset-1 col-sm-10 col-md-11">
-							      <button type="submit" class="btn btn-primary">Finish</button>
-							    </div>
-							</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+						    <label for="fst-name" class="col-sm-2 control-label">Prénom</label>
+						    <div class="col-sm-10">
+						      <input type="text" class="form-control" id="fst-name" name="fst-name">
+						    </div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group">
+						    <label for="email" class="col-sm-2 col-md-1 control-label">Email</label>
+						    <div class="col-sm-10 col-md-11">
+						      <input type="email" class="form-control" id="email" name="email">
+						    </div>
+						</div>
+						<div class="form-group">
+						    <div class="col-sm-offset-2 col-md-offset-1 col-sm-10 col-md-11">
+						      <button type="submit" class="btn btn-primary">Finish</button>
+						    </div>
 						</div>
 					</div>
 				</div>
@@ -161,7 +178,3 @@
 	</div>
 </body>
 </html>
-<?php
-	echo $interation;
-	echo $count;
-?>

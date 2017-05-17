@@ -43,7 +43,7 @@ $fstName = (!empty($_GET['fst-name']))?sanitization($_GET['fst-name']):'';
 
 $msg = 'Cher <strong>'.$lstName.' '.$fstName.'</strong>, ta note est de <strong class="text-primary bigger">'.$count . '/' . count(RIGTH_ANSWERS).'</strong>';
 
-if( !empty($_GET['email']) && filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) != false){
+if( !empty($_GET['email']) && !filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) == false){
 	$email = filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL);
 	sendMail($email, $msg);
 } else {
