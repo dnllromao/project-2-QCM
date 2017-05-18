@@ -1,11 +1,10 @@
 <?php
 
-	$interations = 0;
 	$count = 0;
 
 	function witch_class($name,$value) {
 
-		if(empty($_GET))
+		if(empty($_POST))
 			return;
 
 		global $count;
@@ -19,13 +18,8 @@
 	}
 
 	function is_checked($name,$value) {
-		if( isset($_GET[$name]) && $value == $_GET[$name])
+		if( isset($_POST[$name]) && $value == $_POST[$name])
 			return 'checked';
-	}
-
-	function how_many() {
-		global $interations;
-		$interations++;
 	}
 
 	function sanitization($data) {
@@ -43,10 +37,10 @@
 	}
 
 	// sanitize last and first name and email validation
-	$lstName = (!empty($_GET['lst-name']))?sanitization($_GET['lst-name']):'';
-	$fstName = (!empty($_GET['fst-name']))?sanitization($_GET['fst-name']):'';
+	$lstName = (!empty($_POST['lst-name']))?sanitization($_POST['lst-name']):'';
+	$fstName = (!empty($_POST['fst-name']))?sanitization($_POST['fst-name']):'';
 
-	if( !empty($_GET['email']) && !filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) == false){
-		$email = filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL);
+	if( !empty($_POST['email']) && !filter_var(sanitization($_POST['email']), FILTER_VALIDATE_EMAIL) == false){
+		$email = filter_var(sanitization($_POST['email']), FILTER_VALIDATE_EMAIL);
 		sendMail($email, $msg);
 	}

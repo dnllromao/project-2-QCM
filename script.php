@@ -1,5 +1,6 @@
 <?php
 
+ // next time try filter_input_array() !!
 function sanitization($data) {
 	$data = trim($data); // Strip whitespace
     $data = strip_tags($data); // 
@@ -14,21 +15,25 @@ function sendMail($to,$message) {
 	return mail($to, $sujet, $message, $header);
 }
 
+// 1. Create array with the right answer's choice
 const RIGTH_ANSWERS = [
 	'a' => 'a1',
 	'b' => 'b2',
 	'c' => 'c3'
 ];
 
+// 2. Start var that count how many answers are right
 $count = 0;
-// Check right answers
+
+// 3. Check which answers are right
 foreach (RIGTH_ANSWERS as $question => $value) {
 
-	if( isset($_GET[$question]) && $_GET[$question] == $value ) {
+	if( isset($_POST[$question]) && $_POST[$question] == $value ) {
 		$count++;
 	}
 }
 
+// 4. Select a gif in relation to quiz result
 if ( $count < count(RIGTH_ANSWERS) / 2 ) {
 	$img = 'https://media.giphy.com/media/l0HlKffnZbKPxPe6Y/giphy.gif';
 }elseif ( $count >= (count(RIGTH_ANSWERS) / 2 ) && $count < count(RIGTH_ANSWERS) ) {
@@ -37,14 +42,17 @@ if ( $count < count(RIGTH_ANSWERS) / 2 ) {
 	$img = 'https://media.giphy.com/media/26gJygqmJ3QTUn5Ly/giphy.gif';
 }
 
-// sanitize last and first name and email validation
-$lstName = (!empty($_GET['lst-name']))?sanitization($_GET['lst-name']):'';
-$fstName = (!empty($_GET['fst-name']))?sanitization($_GET['fst-name']):'';
+// 5. Sanitize last and first name
+$lstName = (!empty($_POST['lst-name']))?sanitization($_POST['lst-name']):'';
+$fstName = (!empty($_POST['fst-name']))?sanitization($_POST['fst-name']):'';
 
+// 6. Create message to show
 $msg = 'Cher <strong>'.$lstName.' '.$fstName.'</strong>, ta note est de <strong class="text-primary bigger">'.$count . '/' . count(RIGTH_ANSWERS).'</strong>';
 
-if( !empty($_GET['email']) && !filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) == false){
-	$email = filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL);
+
+// 7. Sanitize and validate email + sending email if everthing is good
+if( !empty($_POST['email']) && !filter_var(sanitization($_POST['email']), FILTER_VALIDATE_EMAIL) == false){
+	$email = filter_var(sanitization($_POST['email']), FILTER_VALIDATE_EMAIL);
 	sendMail($email, $msg);
 } else {
 	$email = '';

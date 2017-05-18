@@ -19,6 +19,8 @@
 	font-size: 170%;
 }
 
+/* upper code generates de ordered list with styling numbers */
+
 .window-height {
 	height: 100vh;
 }

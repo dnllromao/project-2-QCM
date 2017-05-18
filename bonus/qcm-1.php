@@ -1,8 +1,10 @@
 <?php
 	/* 
-	* This one generates form with right and wrong answers 
+	* This one generates the form with right and wrong answers 
+	* and shuftle questions and answers
 	*/
 
+	// 1. Create array with the data needed to generate quiz
 	$questions = [
 		array(
 			'question' => 'La bonne réponse est A?',
@@ -77,26 +79,31 @@
 			<h1 class="text-center"><strong>Take the Quiz</strong></h1>
 		</div>
 		<hr>
-		<form action="" method="get" class="form-horizontal">
+		<form action="" method="post" class="form-horizontal">
 			<div class="row">
 				<ol class="list">
 
 					<?php
-						
-						if (empty($_GET)) { shuffle($questions); }
-						else { $questions = unserialize($_GET['order']); }
+						// 2. Shuftle questions if form is not submited
+						// OR take last order of the quiz
+						if (empty($_POST)) { shuffle($questions); }
+						else { $questions = unserialize($_POST['order']); }
 
 						foreach ($questions as $name => $row) {
 						?>
 							<li>
 								<h4><?= $row['question']?></h4>
 								<?php
-									if(empty($_GET)) { shuffle($row['answers']); }
+									// 3. Shuftle answers if form is not submited
+									if(empty($_POST)) { shuffle($row['answers']); }
+
 									// $row is a local var and i have to assine this value to principal array . thanks to david 
-									
 									$questions[$name] = $row;
+
 									foreach ($row['answers'] as $index => $rep) {
 
+									// 4. witch_class() - return class to show right answers in green and wrong answer in red
+									// is_checked - return attribute checked if user has selected that option
 									?>
 										<div class="radio">
 											<label class="<?= witch_class($name, $rep['value']); ?>">
@@ -108,7 +115,7 @@
 									}
 								?>
 							</li>
-							<?php how_many(); ?>
+
 						<?php
 
 						}
@@ -117,15 +124,16 @@
 				</ol>
 				<!-- serialize doesn't work whitout htmlspecialchars(). why ? -->
 				<input type="hidden" name="order" value="<?= htmlspecialchars(serialize($questions)); ?>">
+				<!-- Send new $questions order to show the same order after page reload -->
 			</div>
 			<hr>
 			<?php
-				if(!empty($_GET)) {
+				if(!empty($_POST)) {
 				?>
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="alert alert-info" role="alert">
-								<p>Tu as réussi <?php echo $count.'/'.$interations; ?> questions.</p> 
+								<p>Tu as réussi <?php echo $count.'/'.count($questions); ?> questions.</p> 
 							</div>
 						</div>
 					</div>

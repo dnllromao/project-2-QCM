@@ -1,6 +1,6 @@
 <?php
 	/* 
-	* This one generates form with right and wrong answers 
+	* Same thing as qcm-1.php
 	*/
 
 	$questions = [
@@ -77,21 +77,21 @@
 			<h1 class="text-center"><strong>Take the Quiz</strong></h1>
 		</div>
 		<hr>
-		<form action="" method="get" class="form-horizontal">
+		<form action="" method="post" class="form-horizontal">
 			<div class="row">
 				<ol class="list">
 
 					<?php
 						
-						if (empty($_GET)) { shuffle($questions); }
-						else { $questions = unserialize($_GET['order']); }
+						if (empty($_POST)) { shuffle($questions); }
+						else { $questions = unserialize($_POST['order']); }
 
 						foreach ($questions as $name => $row) {
 						?>
 							<li>
 								<h4><?= $row['question']?></h4>
 								<?php
-									if(empty($_GET)) { shuffle($row['answers']); }
+									if(empty($_POST)) { shuffle($row['answers']); }
 									// $row is a local var and i have to assine this value to principal array . thanks to david 
 									
 									$questions[$name] = $row;
@@ -108,7 +108,6 @@
 									}
 								?>
 							</li>
-							<?php how_many(); ?>
 						<?php
 
 						}
@@ -120,7 +119,7 @@
 			</div>
 			<hr>
 			<?php
-				if(!empty($_GET)) {
+				if(!empty($_POST)) {
 				?>
 					<div class="row">
 						<div class="col-sm-12">
