@@ -3,29 +3,83 @@
 	* This one generates form with right and wrong answers 
 	*/
 
+	// $questions = [
+	// 	'a' => array(
+	// 		'question' => 'La bonne réponse est A?',
+	// 		'answers' => array(
+	// 				'a1' => 'Réponse A',
+	// 				'c' => 'Réponse B',
+	// 				'a3' => 'Réponse C'
+	// 			)
+	// 		),
+	// 	'b' => array(
+	// 		'question' => 'La bonne réponse est B?',
+	// 		'answers' => array(
+	// 				'c' => 'Réponse A',
+	// 				'b2' => 'Réponse B',
+	// 				'b3' => 'Réponse C'
+	// 			)
+	// 		),
+	// 	'c' => array(
+	// 		'question' => 'La bonne réponse est C?',
+	// 		'answers' => array(
+	// 				'c1' => 'Réponse A',
+	// 				'c' => 'Réponse B',
+	// 				'c3' => 'Réponse C'
+	// 			)
+	// 		)
+	// ];
+
 	$questions = [
-		'a' => array(
+		array(
 			'question' => 'La bonne réponse est A?',
 			'answers' => array(
-					'a1' => 'Réponse A',
-					'c' => 'Réponse B',
-					'a3' => 'Réponse C'
+					array(	
+						'html' => 'Réponse A',
+						'value' => 'a1'
+					),
+					array(
+						'html' => 'Réponse B',
+						'value' => 'c'
+					),
+					array(
+						'html' => 'Réponse C',
+						'value' => 'a3'
+					)
 				)
 			),
-		'b' => array(
+		array(
 			'question' => 'La bonne réponse est B?',
 			'answers' => array(
-					'c' => 'Réponse A',
-					'b2' => 'Réponse B',
-					'b3' => 'Réponse C'
+					array(	
+						'html' => 'Réponse A',
+						'value' => 'c'
+					),
+					array(
+						'html' => 'Réponse B',
+						'value' => 'b2'
+					),
+					array(
+						'html' => 'Réponse C',
+						'value' => 'b3'
+					)
 				)
 			),
-		'c' => array(
+		array(
 			'question' => 'La bonne réponse est C?',
 			'answers' => array(
-					'c1' => 'Réponse A',
-					'c' => 'Réponse B',
-					'c3' => 'Réponse C'
+					array(	
+						'html' => 'Réponse A',
+						'value' => 'c1'
+					),
+					array(
+						'html' => 'Réponse B',
+						'value' => 'c'
+					),
+					array(
+						'html' => 'Réponse C',
+						'value' => 'c3'
+					)
 				)
 			)
 	];
@@ -60,23 +114,21 @@
 						else { $questions = unserialize($_GET['order']); }
 
 						foreach ($questions as $name => $row) {
-							
 						?>
 							<li>
 								<h4><?= $row['question']?></h4>
 								<?php
-									if(empty($_GET)) { 
-										shuffle($row['answers']); 
-									}
+									if(empty($_GET)) { shuffle($row['answers']); }
 									// $row is a local var and i have to assine this value to principal array . thanks to david 
+									
 									$questions[$name] = $row;
-									//echo '<pre>'.print_r($row,true).'</pre>';
-									foreach ($row['answers'] as $value => $html) {
+									foreach ($row['answers'] as $index => $rep) {
+
 									?>
 										<div class="radio">
-											<label class="<?= witch_class($name, $value); ?>">
-										    	<input type="radio" name="<?= $name; ?>" value="<?= $value; ?>" <?= is_checked($name, $value); ?>>
-										    	<?= $html?>
+											<label class="<?= witch_class($name, $rep['value']); ?>">
+										    	<input type="radio" name="<?= $name; ?>" value="<?= $rep['value'] ?>" <?= is_checked($name, $rep['value']); ?>>
+										    	<?= $rep['html']?>
 										  	</label>
 										</div>
 									<?php
