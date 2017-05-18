@@ -1,4 +1,8 @@
 <?php
+
+	/* 
+	* This version shows form with right and wrong answers 
+	*/
 	
 		$questions = 0;
 		$count = 0;
@@ -12,9 +16,9 @@
 
 			if( $value == 'c') {
 				if(is_checked($name,$value)) { $count ++; }
-				return 'green';
+				return 'text-success';
 			}else if( is_checked($name,$value)) {
-				return 'red';
+				return 'text-danger';
 			}
 		}
 

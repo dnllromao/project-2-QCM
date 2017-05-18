@@ -34,12 +34,6 @@
 	font-size: 130%;
 }
 
-.green {
-	color: green;
-}
-.red {
-	color: red;
-}
 
 img {
 	animation: animation 2s cubic-bezier(0.4, 0, 1, 1);

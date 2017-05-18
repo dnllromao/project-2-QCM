@@ -1,13 +1,9 @@
 <?php
+	/* 
+	* This one generates form with right and wrong answers 
+	*/
+
 	$questions = [
-		'a' => array(
-			'question' => 'La bonne réponse est A?',
-			'answers' => array(
-					'a1' => 'Réponse A',
-					'c' => 'Réponse B',
-					'a3' => 'Réponse C'
-				)
-			),
 		'b' => array(
 			'question' => 'La bonne réponse est B?',
 			'answers' => array(
@@ -23,45 +19,18 @@
 					'c' => 'Réponse B',
 					'c3' => 'Réponse C'
 				)
-			)
+			),
+		'a' => array(
+			'question' => 'La bonne réponse est A?',
+			'answers' => array(
+					'a1' => 'Réponse A',
+					'c' => 'Réponse B',
+					'a3' => 'Réponse C'
+				)
+			),
 	];
 
-	$interations = 0;
-	$count = 0;
-
-	function witch_class($name,$value) {
-
-		if(empty($_GET))
-			return;
-
-		global $count;
-
-		if( $value == 'c') {
-			if(is_checked($name,$value)) { $count ++; }
-			return 'green';
-		}else if( is_checked($name,$value)) {
-			return 'red';
-		}
-	}
-
-	function is_checked($name,$value) {
-		if( isset($_GET[$name]) && $value == $_GET[$name])
-			return 'checked';
-	}
-
-	function how_many() {
-		global $interations;
-		$interations++;
-	}
-
-	// sanitize last and first name and email validation
-	$lstName = (!empty($_GET['lst-name']))?sanitization($_GET['lst-name']):'';
-	$fstName = (!empty($_GET['fst-name']))?sanitization($_GET['fst-name']):'';
-
-	if( !empty($_GET['email']) && !filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL) == false){
-		$email = filter_var(sanitization($_GET['email']), FILTER_VALIDATE_EMAIL);
-		sendMail($email, $msg);
-	}
+	require('script.php');
 ?>
 
 <!DOCTYPE html>
@@ -86,12 +55,22 @@
 				<ol class="list">
 
 					<?php
+						
+						if (empty($_GET)) { shuffle($questions); }
+						else { $questions = unserialize($_GET['order']); }
+
 						foreach ($questions as $name => $row) {
+							
 						?>
 							<li>
 								<h4><?= $row['question']?></h4>
 								<?php
-									shuffle($row['answers']);
+									if(empty($_GET)) { 
+										shuffle($row['answers']); 
+									}
+									// $row is a local var and i have to assine this value to principal array . thanks to david 
+									$questions[$name] = $row;
+									//echo '<pre>'.print_r($row,true).'</pre>';
 									foreach ($row['answers'] as $value => $html) {
 									?>
 										<div class="radio">
@@ -108,8 +87,11 @@
 						<?php
 
 						}
+
 					?>
 				</ol>
+				<!-- serialize doesn't work whitout htmlspecialchars(). why ? -->
+				<input type="hidden" name="order" value="<?= htmlspecialchars(serialize($questions)); ?>">
 			</div>
 			<hr>
 			<?php
