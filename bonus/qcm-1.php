@@ -3,33 +3,6 @@
 	* This one generates form with right and wrong answers 
 	*/
 
-	// $questions = [
-	// 	'a' => array(
-	// 		'question' => 'La bonne réponse est A?',
-	// 		'answers' => array(
-	// 				'a1' => 'Réponse A',
-	// 				'c' => 'Réponse B',
-	// 				'a3' => 'Réponse C'
-	// 			)
-	// 		),
-	// 	'b' => array(
-	// 		'question' => 'La bonne réponse est B?',
-	// 		'answers' => array(
-	// 				'c' => 'Réponse A',
-	// 				'b2' => 'Réponse B',
-	// 				'b3' => 'Réponse C'
-	// 			)
-	// 		),
-	// 	'c' => array(
-	// 		'question' => 'La bonne réponse est C?',
-	// 		'answers' => array(
-	// 				'c1' => 'Réponse A',
-	// 				'c' => 'Réponse B',
-	// 				'c3' => 'Réponse C'
-	// 			)
-	// 		)
-	// ];
-
 	$questions = [
 		array(
 			'question' => 'La bonne réponse est A?',
